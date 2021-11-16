@@ -131,7 +131,7 @@ switch (hackCurrent) {
     }
 
     case '2': {
-        console.log("Hack 2 : Change data and hash in a Block")
+        console.log("Hack 2 : Change data and hash in a Node")
         // Change data Node 1
         TuChain.chain[1] = new Node(TuChain.chain[1].prevHash, {
             from: "Thu",
