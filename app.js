@@ -1,5 +1,7 @@
 // install : cmd => npm install crypto-js
 const hash = require('crypto-js/sha256');
+// install : cmd => npm install prompt-sync
+const prompt = require('prompt-sync')({ sigint: true });
 class Node {
 
     // init NODE
@@ -10,10 +12,20 @@ class Node {
         this.timeStamp = new Date();
 
         this.hash = this.caculatorHash();
+
+        this.mineVar = 0
+        this.mine()
     }
 
     caculatorHash() {
-        return hash(this.prevHash + JSON.stringify(this.data) + this.timeStamp).toString();
+        return hash(this.mineVar + this.prevHash + JSON.stringify(this.data) + this.timeStamp).toString();
+    }
+
+    mine() {
+        while (!this.caculatorHash().startsWith('0000')) {
+            this.mineVar++;
+            this.hash = this.caculatorHash();
+        }
     }
 }
 
@@ -55,6 +67,7 @@ class BlockChain {
             // Check NODE data edited 
             // if edit DATA and no edit hash => caculatorHash != hash
             if (currentBlock.caculatorHash() != currentBlock.hash) {
+                console.log(`Error: NODE ${i}: data edited`);
                 return false;
             }
 
@@ -62,6 +75,7 @@ class BlockChain {
             // if edit DATA and Hash, but no edit next NODE => hash != prevHash (next NODE)
             // current NODE is next NODE prevNODE
             if (currentBlock.prevHash != prevBlock.hash) {
+                console.log(`Error: NODE ${i - 1} data and hash edited`);
                 return false;
             }
         }
@@ -83,5 +97,63 @@ TuChain.addBlock(
     ({ from: "Truc", to: "Tu", amount: "8900" })
 )
 
-console.log(TuChain.chain)
-console.log(TuChain.isValid())
+console.log("Defaut BlockChain");
+console.log(TuChain.chain);
+console.log(TuChain.isValid());
+
+
+const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+
+const hackCurrent = prompt('Select hack (1,2,3): ');
+switch (hackCurrent) {
+    case '1': {
+        console.log("Hack 1 : Change data in a Node")
+        TuChain.chain[1] = new Node(TuChain.chain[1].prevHash, {
+            from: "Thu",
+            to: "Truc",
+            amount: "101",
+        })
+        console.log(TuChain.isValid())
+        console.log(TuChain.chain)
+        break;
+    }
+
+    case '2': {
+        console.log("Hack 2 : Change data and hash in a Block")
+        TuChain.chain[1].data = {
+            from: "Thu",
+            to: "Truc",
+            amount: "101",
+        };
+        TuChain.chain[1].hash = TuChain.chain[1].caculatorHash()
+        console.log(TuChain.isValid())
+        console.log(TuChain.chain)
+        break;
+    }
+
+    case '3': {
+        console.log("Hack 3 : Change data and hash in a Node")
+        console.log('')
+        TuChain.chain[1] = new Node(TuChain.chain[1].prevHash, {
+            from: "Thu",
+            to: "Truc",
+            amount: "101",
+        })
+        TuChain.chain[1].hash = TuChain.chain[1].caculatorHash()
+        for (var i = 2; i < TuChain.chain.length; i++) {
+            TuChain.chain[i] = new Node(TuChain.chain[i - 1].hash, TuChain.chain[i].data)
+        }
+        console.log(TuChain.isValid())
+        console.log(TuChain.chain)
+        break;
+    }
+
+    default: {
+        break;
+    }
+}
+
