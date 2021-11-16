@@ -12,22 +12,22 @@ class Node {
         this.timeStamp = new Date();
 
         // init hash
-        this.hash = this.caculatorHash();
+        this.hash = this.calculatorHash();
 
         this.mineVar = 0
         this.mine()
     }
 
-    caculatorHash() {
+    calculatorHash() {
         return hash(this.mineVar + this.prevHash + JSON.stringify(this.data) + this.timeStamp).toString();
     }
 
     mine() {
         // mining
-        // Repest hash until hash = 0000*********************
-        while (!this.caculatorHash().startsWith('0000')) {
+        // Repeat hash until hash = 0000*********************
+        while (!this.calculatorHash().startsWith('0000')) {
             this.mineVar++;
-            this.hash = this.caculatorHash();
+            this.hash = this.calculatorHash();
         }
     }
 }
@@ -68,8 +68,8 @@ class BlockChain {
             const prevBlock = this.chain[i - 1];
 
             // Check NODE data edited 
-            // if edit DATA and no edit hash => caculatorHash != hash
-            if (currentBlock.caculatorHash() != currentBlock.hash) {
+            // if edit DATA and no edit hash => calculatorHash != hash
+            if (currentBlock.calculatorHash() != currentBlock.hash) {
                 console.log(`Error: NODE ${i}: data edited`);
                 return false;
             }
@@ -94,15 +94,15 @@ TuChain.addBlock(
 )
 
 TuChain.addBlock(
-    ({ from: "Thu", to: "Truc", amount: "100" })
+    ({ from: "Thu", to: "Truk", amount: "100" })
 )
 
 TuChain.addBlock(
-    ({ from: "Truc", to: "Tu", amount: "8900" })
+    ({ from: "Truk", to: "Tu", amount: "8900" })
 )
 console.timeEnd('create time')
 
-console.log("Defaut BlockChain");
+console.log("Default BlockChain");
 console.log(TuChain.chain);
 console.log(TuChain.isValid());
 
@@ -120,7 +120,7 @@ switch (hackCurrent) {
         // Change data Node 1
         TuChain.chain[1] = new Node(TuChain.chain[1].prevHash, {
             from: "Thu",
-            to: "Truc",
+            to: "Truk",
             amount: "101",
         })
 
@@ -135,11 +135,11 @@ switch (hackCurrent) {
         // Change data Node 1
         TuChain.chain[1] = new Node(TuChain.chain[1].prevHash, {
             from: "Thu",
-            to: "Truc",
+            to: "Truk",
             amount: "101",
         })
         // Change hash Node 1 
-        TuChain.chain[1].hash = TuChain.chain[1].caculatorHash()
+        TuChain.chain[1].hash = TuChain.chain[1].calculatorHash()
 
         // Print result 
         console.log(TuChain.isValid())
@@ -153,11 +153,11 @@ switch (hackCurrent) {
         // Change data Node 1
         TuChain.chain[1] = new Node(TuChain.chain[1].prevHash, {
             from: "Thu",
-            to: "Truc",
+            to: "Truk",
             amount: "101",
         })
         // Change hash Node 1 
-        TuChain.chain[1].hash = TuChain.chain[1].caculatorHash()
+        TuChain.chain[1].hash = TuChain.chain[1].calculatorHash()
         // Change hashPrev and Hash Node 2 -> last Node
         for (var i = 2; i < TuChain.chain.length; i++) {
             TuChain.chain[i] = new Node(TuChain.chain[i - 1].hash, TuChain.chain[i].data)
