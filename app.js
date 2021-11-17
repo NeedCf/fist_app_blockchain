@@ -160,7 +160,7 @@ switch (hackCurrent) {
         TuChain.chain[1].hash = TuChain.chain[1].calculatorHash()
         // Change hashPrev and Hash Node 2 -> last Node
         for (var i = 2; i < TuChain.chain.length; i++) {
-            TuChain.chain[i] = new Node(TuChain.chain[i - 1].hash, TuChain.chain[i].data)
+            TuChain.chain[i] = new Node(TuChain.chain[i - 1].hash, TuChain.chain[i].data);
         }
         console.timeEnd('hack time')
 
